@@ -115,7 +115,7 @@ Deno.serve(async (req) => {
     const { data: emailData, error: emailError } = await resend.emails.send({
       from: 'Stylish <onboarding@resend.dev>', // Replace with your verified Resend domain
       to: [email],
-      subject: subject,
+      to: ['sbk520831@gmail.com'], // Sending to testing email for now
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <h1 style="color: #1e293b; margin-bottom: 24px;">${statusMessage}</h1>
