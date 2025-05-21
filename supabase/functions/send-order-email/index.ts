@@ -112,6 +112,10 @@ Deno.serve(async (req) => {
          ${shippingAddress.country || 'No country provided'}`
       : 'Shipping address not provided';
 
+    // Log the subject and HTML body before sending
+    console.log('Email Subject:', subject);
+    console.log('Email HTML Body:', html);
+
     const { data: emailData, error: emailError } = await resend.emails.send({
       from: 'Stylish <onboarding@resend.dev>', // Replace with your verified Resend domain
       to: [email],
@@ -158,12 +162,13 @@ Deno.serve(async (req) => {
     });
 
     if (!isAdmin) {
- if (emailError) {
+      if (emailError) {
+        // Log the email error specifically
       console.error('Resend API error:', emailError);
       throw emailError;
- }
+      }
     } else {
- console.log(`Email not sent to admin user: ${email}`);
+      console.log(`Email not sent to admin user: ${email}`);
     }
 
     const successMessage = isAdmin ? 'Order status updated. Email not sent to admin user.' : 'Order status updated and email sent successfully.';
