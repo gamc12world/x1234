@@ -42,6 +42,19 @@ Deno.serve(async (req) => {
       throw new Error('Missing required fields: email, orderNumber, or status');
     }
 
+    // Fetch user details to check admin status
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select('is_admin')
+ .eq('email', email) // Assuming the email in the request corresponds to the user's email
+      .single();
+
+    if (userError && userError.code !== 'PGRST116') { // PGRST116 is "No rows found"
+      throw new Error(`Failed to retrieve user details: ${userError.message}`);
+    }
+
+    const isAdmin = userData?.is_admin === true;
+
     // Update order status in database
     const { error: updateError } = await supabase
       .from('orders')
@@ -100,8 +113,8 @@ Deno.serve(async (req) => {
       : 'Shipping address not provided';
 
     const { data: emailData, error: emailError } = await resend.emails.send({
-      from: 'Stylish <onboarding@resend.dev>',
-      to: email,
+      from: 'Stylish <onboarding@resend.dev>', // Replace with your verified Resend domain
+      to: [email],
       subject: subject,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -133,7 +146,7 @@ Deno.serve(async (req) => {
           <div style="margin-bottom: 24px;">
             <h2 style="color: #1e293b; font-size: 18px;">Shipping Address</h2>
             <p style="color: #475569;">
-              ${formattedAddress}
+ ${formattedAddress}
             </p>
           </div>
 
@@ -141,23 +154,28 @@ Deno.serve(async (req) => {
             <p>Thank you for shopping with Stylish!</p>
             <p>If you have any questions, please contact our support team.</p>
           </div>
-        </div>
-      `,
+        </div>`,
     });
 
-    if (emailError) {
+    if (!isAdmin) {
+ if (emailError) {
       console.error('Resend API error:', emailError);
       throw emailError;
+ }
+    } else {
+ console.log(`Email not sent to admin user: ${email}`);
     }
+
+    const successMessage = isAdmin ? 'Order status updated. Email not sent to admin user.' : 'Order status updated and email sent successfully.';
 
     return new Response(
       JSON.stringify({ 
-        message: 'Order status updated and email sent successfully',
-        data: emailData
+ message: successMessage,
+ data: isAdmin ? null : emailData,
       }),
       { 
         headers: { 
-          ...corsHeaders, 
+ ...corsHeaders, 
           'Content-Type': 'application/json' 
         } 
       },
