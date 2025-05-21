@@ -37,6 +37,11 @@ Deno.serve(async (req) => {
 
     const { email, orderNumber, status, items, total, shippingAddress, orderId } = await req.json();
 
+    // Check for empty or invalid status
+    if (typeof status !== 'string' || status.trim() === '') {
+      throw new Error('Invalid or missing order status in request body.');
+    }
+
     // Validate required fields
     if (!email || !orderNumber || !status) {
       throw new Error('Missing required fields: email, orderNumber, or status');
