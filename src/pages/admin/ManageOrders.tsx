@@ -186,6 +186,10 @@ const ManageOrders: React.FC = () => {
         .eq('id', orderId)
         .maybeSingle();
 
+      console.log(`Refetched order data for ${orderId}:`, refetchedOrder);
+      console.log(`Refetched user email for ${orderId}:`, refetchedOrder?.user?.email);
+      if (fetchError) console.error(`Error refetching order ${orderId}:`, fetchError);
+
       if (fetchError) throw fetchError;
 
       // Send email notification through edge function only if order and user email are found
