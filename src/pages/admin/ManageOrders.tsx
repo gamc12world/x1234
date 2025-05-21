@@ -179,14 +179,18 @@ const ManageOrders: React.FC = () => {
 
       if (updateError) throw updateError;
 
-      // Get the order details
-      const order = orders.find(o => o.id === orderId);
+      // Refetch the specific order data to ensure we have the latest user email
+      const { data: refetchedOrder, error: fetchError } = await supabase
+        .from('orders')
+        .select('*, user: users(*), items: order_items(*)')
+        .eq('id', orderId)
+        .maybeSingle();
+
+      if (fetchError) throw fetchError;
 
       // Send email notification through edge function only if order and user email are found
-      if (!order) {
-        console.warn(`Order with ID ${orderId} not found in local state.`);
-      } else if (!order.user?.email) {
-        console.warn(`Skipping email notification for order ${orderId}: User email not found.`);
+      if (!refetchedOrder || !refetchedOrder.user?.email) {
+        console.warn(`Skipping email notification for order ${orderId}: Order or user email not found after refetch.`);
       } else {
         try {
           await supabase.functions.invoke('send-order-email', {
@@ -194,10 +198,10 @@ const ManageOrders: React.FC = () => {
               orderNumber: order.id.slice(0, 8),
               status: newStatus,
               items: order.items,
-              total: order.total,
-              shippingAddress: order.shippingAddress,
-              customerName: order.user.name,
-              orderId: order.id // Add orderId to the payload
+ total: refetchedOrder.total,
+ shippingAddress: refetchedOrder.shippingAddress,
+ customerName: refetchedOrder.user.name,
+ orderId: refetchedOrder.id // Add orderId to the payload
             }
           });
         } catch (emailError) {
