@@ -120,6 +120,7 @@ Deno.serve(async (req) => {
     // Log the subject and HTML body before sending
     console.log('Email Subject:', subject);
 
+    console.log('Final subject before sending:', subject);
     const { data: emailData, error: emailError } = await resend.emails.send({
       from: 'Stylish <onboarding@resend.dev>', // Replace with your verified Resend domain
       to: [email],
