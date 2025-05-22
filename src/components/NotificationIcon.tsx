@@ -2,15 +2,15 @@ import React, { useContext } from 'react';
 import { useNotifications } from '../contexts/NotificationContext';
 
 const NotificationIcon: React.FC = () => {
-  const { notifications, markAsRead } = useNotifications();
 
-  const unreadCount = notifications.filter(notification => !notification.read).length;
+const NotificationIcon: React.FC<NotificationIconProps> = ({ onIconClick }) => {
+  const { notifications } = useNotifications(); // Removed markAsRead as it's not used here
 
   const handleIconClick = () => {
-    console.log('Notifications:', notifications);
-    // In a real implementation, you would show a notification list here
-    // and potentially mark notifications as read when the list is opened.
+    onIconClick(); // Call the prop when the icon is clicked
   };
+
+  const unreadCount = notifications.filter(notification => !notification.read).length;
 
   return (
     <div className="relative cursor-pointer" onClick={handleIconClick}>
@@ -24,6 +24,6 @@ const NotificationIcon: React.FC = () => {
       )}
     </div>
   );
-};
+}};
 
 export default NotificationIcon;
