@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingBag, User, Search, Menu, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
-import NotificationIcon from './NotificationIcon';
+
 
 const Header: React.FC = () => {
   const { user, logout } = useAuth();
@@ -28,10 +27,6 @@ const Header: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const handleNotificationIconClick = () => {
-    // Placeholder function - add logic to display notifications later
-  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,7 +99,6 @@ const Header: React.FC = () => {
 
           {/* Right Icons */}
           <div className="flex items-center space-x-4">
-            <NotificationIcon onIconClick={handleNotificationIconClick} />
             <Link to="/cart" className="relative p-1">
               <ShoppingBag size={22} />
               {totalItems > 0 && (

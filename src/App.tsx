@@ -17,13 +17,11 @@ import NotFoundPage from './pages/NotFoundPage';
 import OrderConfirmation from './pages/OrderConfirmation';
 import { useAuth } from './contexts/AuthContext';
 import SearchPage from './pages/SearchPage';
-import { NotificationProvider } from './contexts/NotificationContext';
 
 function App() {
   const { user } = useAuth();
 
   return (
-    <NotificationProvider>
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
@@ -48,7 +46,6 @@ function App() {
         </Route>
       )}
     </Routes>
-    </NotificationProvider>
   );
 }
 
