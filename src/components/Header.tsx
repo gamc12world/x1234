@@ -29,6 +29,10 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleNotificationIconClick = () => {
+    // Placeholder function - add logic to display notifications later
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -110,7 +114,7 @@ const Header: React.FC = () => {
 
             {user ? (
               // Add Notification Icon here
-              <NotificationIcon />
+              <NotificationIcon onIconClick={handleNotificationIconClick} />
             ) : null}
 
             {user ? (
