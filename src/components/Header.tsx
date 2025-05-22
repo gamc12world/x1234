@@ -105,6 +105,7 @@ const Header: React.FC = () => {
 
           {/* Right Icons */}
           <div className="flex items-center space-x-4">
+ <p>Notification Test</p>
  <NotificationIcon onIconClick={handleNotificationIconClick} />
             <Link to="/cart" className="relative p-1">
               <ShoppingBag size={22} />
