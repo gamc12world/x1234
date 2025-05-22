@@ -97,6 +97,13 @@ Deno.serve(async (req) => {
         statusMessage = `Your order status has been updated to: ${status}`;
     }
 
+    // Create notification payload
+    const notificationPayload = {
+      orderNumber: orderNumber,
+      statusMessage: statusMessage,
+    };
+    console.log('Notification Payload:', notificationPayload);
+
     // Handle empty or invalid items array
     const itemsList = Array.isArray(items) && items.length > 0
       ? items.map((item: any) => `
