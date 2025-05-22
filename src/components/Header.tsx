@@ -85,7 +85,9 @@ const Header: React.FC = () => {
             <Link to="/category/kids" className="text-slate-700 hover:text-slate-900">
               Kids
             </Link>
+            <NotificationIcon onIconClick={handleNotificationIconClick} />
           </nav>
+
 
           {/* Search Form - Desktop */}
           <form onSubmit={handleSearch} className="hidden md:flex items-center border border-slate-300 rounded-md overflow-hidden">
@@ -112,10 +114,6 @@ const Header: React.FC = () => {
               )}
             </Link>
 
-            {user ? (
-              // Add Notification Icon here
-              <NotificationIcon onIconClick={handleNotificationIconClick} />
-            ) : null}
 
             {user ? (
               <div 
