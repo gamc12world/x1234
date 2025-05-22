@@ -1,10 +1,13 @@
 import React, { useContext } from 'react';
 import { useNotifications } from '../contexts/NotificationContext';
 
-const NotificationIcon: React.FC = () => {
+interface NotificationIconProps {
+  onIconClick: () => void;
+}
+
 const NotificationIcon: React.FC<NotificationIconProps> = ({ onIconClick }) => {
   const handleIconClick = () => {
-    onIconClick(); // Call the prop when the icon is clicked
+ onIconClick(); // Call the prop when the icon is clicked
   };
 
   return (
@@ -12,6 +15,6 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ onIconClick }) => {
       Basic Notification Icon
     </div>
   );
-}};
+};
 
 export default NotificationIcon;
