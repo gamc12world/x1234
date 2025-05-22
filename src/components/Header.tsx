@@ -85,7 +85,6 @@ const Header: React.FC = () => {
             <Link to="/category/kids" className="text-slate-700 hover:text-slate-900">
               Kids
             </Link>
-            <NotificationIcon onIconClick={handleNotificationIconClick} />
           </nav>
 
 
@@ -105,8 +104,7 @@ const Header: React.FC = () => {
 
           {/* Right Icons */}
           <div className="flex items-center space-x-4">
- <p>Notification Test</p>
- <NotificationIcon onIconClick={handleNotificationIconClick} />
+            <NotificationIcon onIconClick={handleNotificationIconClick} />
             <Link to="/cart" className="relative p-1">
               <ShoppingBag size={22} />
               {totalItems > 0 && (

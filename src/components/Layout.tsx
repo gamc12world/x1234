@@ -13,19 +13,19 @@ const Layout: React.FC = () => {
  const [showNotifications, setShowNotifications] = useState(false); // State to manage list visibility
  
   useEffect(() => {
-    const productSubscription = supabase
-      .channel('product_changes') // Choose a channel name
+    const orderSubscription = supabase
+      .channel('order_changes') // Choose a channel name, e.g., 'order_changes'
 
       .on(
         'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'products' },
+        { event: 'UPDATE', schema: 'public', table: 'orders' },
         (payload) => {
-          const oldProduct = payload.old;
-          const newProduct = payload.new;
+          const oldOrder = payload.old;
+          const newOrder = payload.new;
 
           // Check if the status has changed
-          if (oldProduct.status !== newProduct.status) {
-            addNotification(`Product "${newProduct.name}" status updated to ${newProduct.status}`);
+          if (oldOrder.status !== newOrder.status) {
+            addNotification(`Order #${newOrder.id} status updated to ${newOrder.status}`);
           }
         }
       )
