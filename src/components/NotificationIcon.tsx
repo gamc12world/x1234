@@ -2,9 +2,7 @@ import React, { useContext } from 'react';
 import { useNotifications } from '../contexts/NotificationContext';
 
 const NotificationIcon: React.FC = () => {
-
 const NotificationIcon: React.FC<NotificationIconProps> = ({ onIconClick }) => {
-  const { notifications } = useNotifications(); // Removed markAsRead as it's not used here
 
   const handleIconClick = () => {
     onIconClick(); // Call the prop when the icon is clicked
