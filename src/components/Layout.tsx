@@ -12,9 +12,10 @@ const Layout: React.FC = () => {
  const { addNotification } = useNotifications();
  const [showNotifications, setShowNotifications] = useState(false); // State to manage list visibility
   let orderSubscription: any = null; // Declare variable outside useEffect
+  let productSubscription: any = null; // Declare variable for product subscription
  
   useEffect(() => {
-     orderSubscription = supabase // Assign subscription to the variable
+    orderSubscription = supabase // Assign subscription to the variable
       .channel('order_changes') // Choose a channel name, e.g., 'order_changes'
 
       
@@ -38,6 +39,29 @@ const Layout: React.FC = () => {
     };
   }, []);
 
+  // Effect for product status updates
+  useEffect(() => {
+    productSubscription = supabase // Assign subscription to the variable
+      .channel('product_changes') // Choose a unique channel name
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'products' },
+        (payload) => {
+          const oldProduct = payload.old;
+          const newProduct = payload.new;
+
+          // Check if the status has changed
+          if (oldProduct.status !== newProduct.status) {
+            addNotification(`Product "${newProduct.name}" status updated to ${newProduct.status}`);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      if (productSubscription) supabase.removeChannel(productSubscription); // Use the declared variable
+    };
+  }, []); // Empty dependency array to run once on mount and clean up on unmount
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
   };
