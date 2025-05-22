@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag, User, Search, Menu, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
+import NotificationIcon from './NotificationIcon';
 
 const Header: React.FC = () => {
   const { user, logout } = useAuth();
@@ -106,6 +107,11 @@ const Header: React.FC = () => {
                 </span>
               )}
             </Link>
+
+            {user ? (
+              // Add Notification Icon here
+              <NotificationIcon />
+            ) : null}
 
             {user ? (
               <div 
