@@ -11,11 +11,13 @@ import NotificationList from './NotificationList'; // Import NotificationList
 const Layout: React.FC = () => {
  const { addNotification } = useNotifications();
  const [showNotifications, setShowNotifications] = useState(false); // State to manage list visibility
+  let orderSubscription: any = null; // Declare variable outside useEffect
  
   useEffect(() => {
-    const orderSubscription = supabase
+     orderSubscription = supabase // Assign subscription to the variable
       .channel('order_changes') // Choose a channel name, e.g., 'order_changes'
 
+      
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'orders' },
@@ -32,7 +34,7 @@ const Layout: React.FC = () => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(productSubscription);
+      if (orderSubscription) supabase.removeChannel(orderSubscription); // Use the declared variable
     };
   }, []);
 
